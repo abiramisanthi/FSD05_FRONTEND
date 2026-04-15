@@ -1,7 +1,5 @@
-// ✅ Local API URL for testing
+// API base URL
 const API_URL = 'https://fsd05-backend-3.onrender.com';
-// ✅ Production API URL (Render Backend)
-// const API_URL = 'https://fsd05-backend-2.onrender.com/api';
 
 class API {
     // Get auth token from localStorage
@@ -29,9 +27,10 @@ class API {
         return data;
     }
 
-    // Auth APIs
+    // ================= AUTH APIs =================
+
     async register(userData) {
-        const response = await fetch(`${API_URL}/auth/register`, {
+        const response = await fetch(`${API_URL}/api/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData)
@@ -40,7 +39,7 @@ class API {
     }
 
     async login(credentials) {
-        const response = await fetch(`${API_URL}/auth/login`, {
+        const response = await fetch(`${API_URL}/api/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(credentials)
@@ -49,25 +48,28 @@ class API {
     }
 
     async getProfile() {
-        const response = await fetch(`${API_URL}/auth/profile`, {
+        const response = await fetch(`${API_URL}/api/auth/profile`, {
             headers: this.getAuthHeaders()
         });
         return this.handleResponse(response);
     }
 
     async logout() {
-        const response = await fetch(`${API_URL}/auth/logout`, {
+        const response = await fetch(`${API_URL}/api/auth/logout`, {
             method: 'POST',
             headers: this.getAuthHeaders()
         });
+
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+
         return this.handleResponse(response);
     }
 
-    // Request APIs
+    // ================= REQUEST APIs =================
+
     async createRequest(requestData) {
-        const response = await fetch(`${API_URL}/requests`, {
+        const response = await fetch(`${API_URL}/api/requests`, {
             method: 'POST',
             headers: this.getAuthHeaders(),
             body: JSON.stringify(requestData)
@@ -77,94 +79,159 @@ class API {
 
     async getMyRequests(params = {}) {
         const query = new URLSearchParams(params).toString();
-        const response = await fetch(`${API_URL}/requests/my-requests?${query}`, {
-            headers: this.getAuthHeaders()
-        });
+
+        const response = await fetch(
+            `${API_URL}/api/requests/my-requests?${query}`,
+            {
+                headers: this.getAuthHeaders()
+            }
+        );
+
         return this.handleResponse(response);
     }
 
     async getAllRequests(params = {}) {
         const query = new URLSearchParams(params).toString();
-        const response = await fetch(`${API_URL}/requests/all?${query}`, {
-            headers: this.getAuthHeaders()
-        });
+
+        const response = await fetch(
+            `${API_URL}/api/requests/all?${query}`,
+            {
+                headers: this.getAuthHeaders()
+            }
+        );
+
         return this.handleResponse(response);
     }
 
     async updateRequestStatus(requestId, statusData) {
-        const response = await fetch(`${API_URL}/requests/${requestId}/status`, {
-            method: 'PUT',
-            headers: this.getAuthHeaders(),
-            body: JSON.stringify(statusData)
-        });
+        const response = await fetch(
+            `${API_URL}/api/requests/${requestId}/status`,
+            {
+                method: 'PUT',
+                headers: this.getAuthHeaders(),
+                body: JSON.stringify(statusData)
+            }
+        );
+
         return this.handleResponse(response);
     }
 
-    // AI APIs
+    // ================= AI APIs =================
+
     async validateRequest(data) {
-        const response = await fetch(`${API_URL}/ai/validate-request`, {
-            method: 'POST',
-            headers: this.getAuthHeaders(),
-            body: JSON.stringify(data)
-        });
+        const response = await fetch(
+            `${API_URL}/api/ai/validate-request`,
+            {
+                method: 'POST',
+                headers: this.getAuthHeaders(),
+                body: JSON.stringify(data)
+            }
+        );
+
         return this.handleResponse(response);
     }
 
     async suggestReasons(data) {
-        const response = await fetch(`${API_URL}/ai/suggest-reasons`, {
-            method: 'POST',
-            headers: this.getAuthHeaders(),
-            body: JSON.stringify(data)
-        });
+        const response = await fetch(
+            `${API_URL}/api/ai/suggest-reasons`,
+            {
+                method: 'POST',
+                headers: this.getAuthHeaders(),
+                body: JSON.stringify(data)
+            }
+        );
+
         return this.handleResponse(response);
     }
 
     async chat(data) {
-        const response = await fetch(`${API_URL}/ai/chat`, {
-            method: 'POST',
-            headers: this.getAuthHeaders(),
-            body: JSON.stringify(data)
-        });
+        const response = await fetch(
+            `${API_URL}/api/ai/chat`,
+            {
+                method: 'POST',
+                headers: this.getAuthHeaders(),
+                body: JSON.stringify(data)
+            }
+        );
+
         return this.handleResponse(response);
     }
 
-    // Analytics API
+    // ================= ANALYTICS =================
+
     async getAnalytics() {
-        const response = await fetch(`${API_URL}/analytics`, {
-            headers: this.getAuthHeaders()
-        });
+        const response = await fetch(
+            `${API_URL}/api/analytics`,
+            {
+                headers: this.getAuthHeaders()
+            }
+        );
+
         return this.handleResponse(response);
     }
 
-    // Audit API
+    // ================= AUDIT =================
+
     async getAuditLogs(params = {}) {
         const query = new URLSearchParams(params).toString();
-        const response = await fetch(`${API_URL}/audit?${query}`, {
-            headers: this.getAuthHeaders()
-        });
+
+        const response = await fetch(
+            `${API_URL}/api/audit?${query}`,
+            {
+                headers: this.getAuthHeaders()
+            }
+        );
+
         return this.handleResponse(response);
     }
 
-    // Notifications API
+    // ================= NOTIFICATIONS =================
+
     async getNotifications() {
-        const response = await fetch(`${API_URL}/notifications`, { headers: this.getAuthHeaders() });
-        return this.handleResponse(response);
-    }
-    async markNotificationsRead() {
-        const response = await fetch(`${API_URL}/notifications/read-all`, { method: 'PUT', headers: this.getAuthHeaders() });
-        return this.handleResponse(response);
-    }
-    async clearNotifications() {
-        const response = await fetch(`${API_URL}/notifications/clear`, { method: 'DELETE', headers: this.getAuthHeaders() });
+        const response = await fetch(
+            `${API_URL}/api/notifications`,
+            {
+                headers: this.getAuthHeaders()
+            }
+        );
+
         return this.handleResponse(response);
     }
 
-    // Export Helpers
+    async markNotificationsRead() {
+        const response = await fetch(
+            `${API_URL}/api/notifications/read-all`,
+            {
+                method: 'PUT',
+                headers: this.getAuthHeaders()
+            }
+        );
+
+        return this.handleResponse(response);
+    }
+
+    async clearNotifications() {
+        const response = await fetch(
+            `${API_URL}/api/notifications/clear`,
+            {
+                method: 'DELETE',
+                headers: this.getAuthHeaders()
+            }
+        );
+
+        return this.handleResponse(response);
+    }
+
+    // ================= EXPORT =================
+
     async downloadExport(type) {
-        const response = await fetch(`${API_URL}/requests/export/${type}`, {
-            method: 'GET',
-            headers: this.getAuthHeaders() // Must pass JWT for protection
-        });
+        const response = await fetch(
+            `${API_URL}/api/requests/export/${type}`,
+            {
+                method: 'GET',
+                headers: this.getAuthHeaders()
+            }
+        );
 
         if (!response.ok) {
             const err = await response.json();
@@ -173,12 +240,15 @@ class API {
 
         const blob = await response.blob();
         const downloadUrl = window.URL.createObjectURL(blob);
+
         const link = document.createElement('a');
         link.href = downloadUrl;
         link.download = `access_requests.${type}`;
+
         document.body.appendChild(link);
         link.click();
         link.remove();
+
         window.URL.revokeObjectURL(downloadUrl);
     }
 }
