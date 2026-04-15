@@ -2,8 +2,10 @@
     "name": "access-request-frontend",
     "version": "1.0.0",
     "description": "Frontend for Access Request Management Portal",
+    "type": "module",
     "scripts": {
-        "start": "npx http-server -p 3000 -c-1 --cors"
+        "start": "npx live-server --entry-file=index.html --port=8080",
+        "serve": "npx http-server -p 3000 -c-1 --cors"
     },
     "keywords": [],
     "author": "",

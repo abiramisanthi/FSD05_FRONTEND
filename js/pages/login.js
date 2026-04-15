@@ -2,8 +2,11 @@ import api from '../api.js';
 import auth from '../auth.js';
 import router from '../router.js';
 import { showAlert, setButtonLoading } from '../utils.js';
+import notifications from '../components/notifications.js';
 
 export function renderLogin() {
+  // Always destroy notifications on the login page
+  notifications.destroy();
   const app = document.getElementById('app');
   app.innerHTML = `
     <div class="auth-container">

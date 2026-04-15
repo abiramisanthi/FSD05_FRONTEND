@@ -17,8 +17,25 @@ class Router {
             this.currentRoute = path;
             window.history.pushState({}, '', path);
             this.routes[path]();
+            
+            // Re-init features
+            this.reinitFeatures();
         } else {
             console.error(`Route ${path} not found`);
+        }
+    }
+
+    reinitFeatures() {
+        const publicRoutes = ['/login', '/register'];
+        const isPublic = publicRoutes.includes(this.currentRoute);
+
+        if (isPublic) {
+            // Destroy socket/UI on public pages so notification bell never shows
+            import('./components/notifications.js').then(m => m.default.destroy());
+        } else {
+            // Only init for authenticated pages
+            import('./components/chatbot.js').then(m => m.default.init());
+            import('./components/notifications.js').then(m => m.default.init());
         }
     }
 
@@ -47,7 +64,7 @@ class Router {
             // Redirect to appropriate dashboard based on role
             if (auth.hasRole('REQUESTER')) {
                 this.navigate('/requester-dashboard');
-            } else if (auth.hasRole('APPROVER')) {
+            } else if (auth.hasRole('APPROVER') || auth.hasRole('ADMIN')) {
                 this.navigate('/approver-dashboard');
             }
             return;
@@ -57,12 +74,13 @@ class Router {
         if (this.routes[path]) {
             this.currentRoute = path;
             this.routes[path]();
+            this.reinitFeatures();
         } else {
             // Default route
             if (auth.isAuthenticated()) {
                 if (auth.hasRole('REQUESTER')) {
                     this.navigate('/requester-dashboard');
-                } else if (auth.hasRole('APPROVER')) {
+                } else if (auth.hasRole('APPROVER') || auth.hasRole('ADMIN')) {
                     this.navigate('/approver-dashboard');
                 }
             } else {

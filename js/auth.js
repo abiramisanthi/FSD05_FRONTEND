@@ -21,8 +21,13 @@ class Auth {
     getCurrentUser() {
         if (!this.user) {
             const userStr = localStorage.getItem('user');
-            if (userStr) {
-                this.user = JSON.parse(userStr);
+            if (userStr && userStr !== 'undefined') {
+                try {
+                    this.user = JSON.parse(userStr);
+                } catch (e) {
+                    this.user = null;
+                    localStorage.removeItem('user');
+                }
             }
         }
         return this.user;

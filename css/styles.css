@@ -320,6 +320,16 @@ h2.card-title {
   color: #ff3b3b;
 }
 
+.badge-info {
+  background: rgba(112, 71, 235, 0.15);
+  color: #7047EB;
+}
+
+.badge-danger {
+  background: rgba(255, 87, 34, 0.15);
+  color: #FF5722;
+}
+
 /* --- Auth Pages --- */
 .auth-container {
   height: 100vh;
